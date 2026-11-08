@@ -1,0 +1,15 @@
+@{
+ string topic=(string)ViewBag.Topic;
+ string title=topic=="children"?"Chọn sách để đọc cùng trẻ":topic=="notes"?"Giữ lại điều hay sau mỗi lần đọc":"Tạo một khoảng riêng cho trang sách";
+ ViewData["Title"]=title;
+}
+<nav class="breadcrumb-custom"><a href="/">Trang chủ</a><span> / </span><span>Góc bạn đọc</span></nav>
+<article class="policy reading-guide"><span class="eyebrow">GÓC BẠN ĐỌC · MỘC BOOKS</span><h1>@title</h1><p class="guide-lead">Một vài gợi ý nhỏ để việc đọc sách trở thành khoảng thời gian bạn mong đợi.</p>
+@if(topic=="children"){
+<h2>Bắt đầu từ sở thích của trẻ</h2><p>Hỏi trẻ muốn khám phá động vật, không gian, những câu chuyện hay một chủ đề khác. Đưa ra vài lựa chọn rồi cùng xem phần giới thiệu.</p><h2>Xem cách trình bày</h2><p>Quan tâm kích thước chữ, tranh minh họa, độ dài và độ khó của nội dung. Đọc thử nếu có để xem cuốn sách có phù hợp với trẻ không.</p><h2>Đọc và trò chuyện</h2><p>Dừng ở những đoạn thú vị, hỏi trẻ chú ý chi tiết nào và nhân vật có thể làm gì tiếp theo. Không cần biến mỗi lần đọc thành một bài kiểm tra.</p><h2>Để trẻ chọn một cuốn tiếp theo</h2><p>Giữ nhịp đọc ngắn và thoải mái. Cho trẻ tham gia lựa chọn để tủ sách phản ánh điều trẻ đang tò mò.</p>
+}else if(topic=="notes"){
+<h2>Mỗi lần đọc, giữ một ý</h2><p>Thay vì cố ghi lại toàn bộ, chọn một ý khiến bạn dừng lại suy nghĩ. Viết bằng lời của mình để kiểm tra bạn đã hiểu thế nào.</p><h2>Thêm một ví dụ gần gũi</h2><p>Liên hệ ý vừa đọc với việc học, công việc hoặc một tình huống bạn gặp. Ví dụ giúp ghi chú có ý nghĩa khi xem lại.</p><h2>Giữ một câu hỏi mở</h2><p>Viết điều bạn còn muốn biết. Câu hỏi đó có thể dẫn bạn tới chương sau hoặc một đầu sách khác.</p><h2>Xem lại sau vài ngày</h2><p>Đọc lại ghi chú và bổ sung nếu suy nghĩ đã thay đổi. Một cuốn sổ nhỏ hoặc ghi chú điện thoại đều có thể dùng được.</p>
+}else{
+<h2>Chọn một thời điểm dễ duy trì</h2><p>Thử đọc sau bữa sáng, trước khi ngủ hoặc trong một khoảng nghỉ phù hợp. Bắt đầu bằng 10 phút, không cần đặt mục tiêu quá lớn.</p><h2>Để cuốn sách ở nơi dễ thấy</h2><p>Chuẩn bị chỗ ngồi đủ sáng và một cuốn bạn muốn đọc. Giảm thông báo điện thoại trong khoảng thời gian này nếu có thể.</p><h2>Cho phép mình đổi sách</h2><p>Nếu chưa hứng thú, xem phần đọc thử hoặc tìm chủ đề khác. Mục tiêu ban đầu là tạo một khoảng đọc thoải mái.</p><h2>Ghi một điều sau khi đọc</h2><p>Một câu hỏi hoặc một ý muốn tìm hiểu thêm là đủ. Sau một tuần, nhìn lại những trang đã đọc và chọn nhịp phù hợp cho tuần tiếp theo.</p>
+}
+<div class="guide-next"><strong>Chọn một cuốn cho lần đọc tiếp theo</strong><a href="/Home/Index?hasSample=true#catalog" class="btn btn-forest">Khám phá sách đọc thử →</a></div><p class="muted">Bài hướng dẫn do Mộc Books biên soạn cho website.</p></article>

@@ -1,0 +1,87 @@
+USE BookStoreOnline;
+GO
+-- 06: Them 8 dau sach co nguon an ban; gia, ton kho va bia la minh hoa.
+-- Chay sau 03. Nen hoan tat 04 va 05 de co du du lieu mac dinh.
+-- Khong chen trung, khong ghi de mo ta admin da chinh sua.
+SET XACT_ABORT ON;
+BEGIN TRY
+ BEGIN TRANSACTION;
+ IF NOT EXISTS(SELECT 1 FROM dbo.Categories WITH(UPDLOCK,HOLDLOCK) WHERE Name=N'Kỹ năng sống') INSERT INTO dbo.Categories(Name) VALUES(N'Kỹ năng sống');
+ IF NOT EXISTS(SELECT 1 FROM dbo.Categories WITH(UPDLOCK,HOLDLOCK) WHERE Name=N'Lịch sử & văn hóa') INSERT INTO dbo.Categories(Name) VALUES(N'Lịch sử & văn hóa');
+ IF NOT EXISTS(SELECT 1 FROM dbo.Categories WITH(UPDLOCK,HOLDLOCK) WHERE Name=N'Thiếu nhi') INSERT INTO dbo.Categories(Name) VALUES(N'Thiếu nhi');
+ IF NOT EXISTS(SELECT 1 FROM dbo.Categories WITH(UPDLOCK,HOLDLOCK) WHERE Name=N'Văn học') INSERT INTO dbo.Categories(Name) VALUES(N'Văn học');
+ IF NOT EXISTS(SELECT 1 FROM dbo.Authors WITH(UPDLOCK,HOLDLOCK) WHERE Name=N'Fukuzawa Yukichi') INSERT INTO dbo.Authors(Name) VALUES(N'Fukuzawa Yukichi');
+ IF NOT EXISTS(SELECT 1 FROM dbo.Authors WITH(UPDLOCK,HOLDLOCK) WHERE Name=N'Hae Min') INSERT INTO dbo.Authors(Name) VALUES(N'Hae Min');
+ IF NOT EXISTS(SELECT 1 FROM dbo.Authors WITH(UPDLOCK,HOLDLOCK) WHERE Name=N'José Mauro de Vasconcelos') INSERT INTO dbo.Authors(Name) VALUES(N'José Mauro de Vasconcelos');
+ IF NOT EXISTS(SELECT 1 FROM dbo.Authors WITH(UPDLOCK,HOLDLOCK) WHERE Name=N'Luis Sepúlveda') INSERT INTO dbo.Authors(Name) VALUES(N'Luis Sepúlveda');
+ IF NOT EXISTS(SELECT 1 FROM dbo.Authors WITH(UPDLOCK,HOLDLOCK) WHERE Name=N'Ocean Vuong') INSERT INTO dbo.Authors(Name) VALUES(N'Ocean Vuong');
+ IF NOT EXISTS(SELECT 1 FROM dbo.Authors WITH(UPDLOCK,HOLDLOCK) WHERE Name=N'Rosie Nguyễn') INSERT INTO dbo.Authors(Name) VALUES(N'Rosie Nguyễn');
+ IF NOT EXISTS(SELECT 1 FROM dbo.Authors WITH(UPDLOCK,HOLDLOCK) WHERE Name=N'Trần Quang Đức') INSERT INTO dbo.Authors(Name) VALUES(N'Trần Quang Đức');
+ IF NOT EXISTS(SELECT 1 FROM dbo.Authors WITH(UPDLOCK,HOLDLOCK) WHERE Name=N'Đặng Thùy Trâm') INSERT INTO dbo.Authors(Name) VALUES(N'Đặng Thùy Trâm');
+ IF NOT EXISTS(SELECT 1 FROM dbo.Publishers WITH(UPDLOCK,HOLDLOCK) WHERE Name=N'NXB Hội Nhà Văn') INSERT INTO dbo.Publishers(Name) VALUES(N'NXB Hội Nhà Văn');
+ IF NOT EXISTS(SELECT 1 FROM dbo.Publishers WITH(UPDLOCK,HOLDLOCK) WHERE Name=N'NXB Thế Giới') INSERT INTO dbo.Publishers(Name) VALUES(N'NXB Thế Giới');
+ IF NOT EXISTS(SELECT 1 FROM dbo.Books WITH(UPDLOCK,HOLDLOCK) WHERE Isbn=N'CAT-EDIT-001')
+ INSERT INTO dbo.Books(Title,Description,Isbn,CategoryId,AuthorId,PublisherId,Price,ListPrice,Stock,Pages,Year,ImagePath,SampleText,IsActive,Language,Binding,Dimensions,Translator,SourceUrl) VALUES(N'Cây cam ngọt của tôi',N'Câu chuyện theo chân Zezé, một cậu bé giàu trí tưởng tượng lớn lên trong hoàn cảnh khó khăn. Những tình bạn và trải nghiệm của cậu gợi suy nghĩ về sự cảm thông và tình yêu thương.',N'CAT-EDIT-001',(SELECT Id FROM dbo.Categories WHERE Name=N'Văn học'),(SELECT Id FROM dbo.Authors WHERE Name=N'José Mauro de Vasconcelos'),(SELECT Id FROM dbo.Publishers WHERE Name=N'NXB Hội Nhà Văn'),89000,99000,13,244,2020,N'/images/edition-01.svg',N'',1,N'Tiếng Việt',N'Đang cập nhật',N'',N'Nguyễn Bích Lan – Tô Yến Ly',N'https://nhanam.vn/cay-cam-ngot-cua-toi-nha-nam');
+ IF NOT EXISTS(SELECT 1 FROM dbo.Books WITH(UPDLOCK,HOLDLOCK) WHERE Isbn=N'CAT-EDIT-002')
+ INSERT INTO dbo.Books(Title,Description,Isbn,CategoryId,AuthorId,PublisherId,Price,ListPrice,Stock,Pages,Year,ImagePath,SampleText,IsActive,Language,Binding,Dimensions,Translator,SourceUrl) VALUES(N'Bước chậm lại giữa thế gian vội vã — Ấn bản đặc biệt 20 năm',N'Những suy ngẫm về nhịp sống, các mối quan hệ và cách nhìn lại bản thân. Cuốn sách mời người đọc dành một khoảng dừng giữa những bận rộn thường ngày.',N'CAT-EDIT-002',(SELECT Id FROM dbo.Categories WHERE Name=N'Kỹ năng sống'),(SELECT Id FROM dbo.Authors WHERE Name=N'Hae Min'),(SELECT Id FROM dbo.Publishers WHERE Name=N'NXB Hội Nhà Văn'),269000,299000,14,260,2025,N'/images/edition-02.svg',N'',1,N'Tiếng Việt',N'Đang cập nhật',N'14 x 20.5 cm',N'Nguyễn Việt Tú Anh',N'https://nhanam.vn/dat-truoc-buoc-cham-lai-giua-the-gian-voi-va-sach-ban-dac-biet-ky-niem-20-nam-nha-nam');
+ IF NOT EXISTS(SELECT 1 FROM dbo.Books WITH(UPDLOCK,HOLDLOCK) WHERE Isbn=N'CAT-EDIT-003')
+ INSERT INTO dbo.Books(Title,Description,Isbn,CategoryId,AuthorId,PublisherId,Price,ListPrice,Stock,Pages,Year,ImagePath,SampleText,IsActive,Language,Binding,Dimensions,Translator,SourceUrl) VALUES(N'Tuổi trẻ đáng giá bao nhiêu — Ấn bản đặc biệt 20 năm',N'Tác giả chia sẻ suy nghĩ về lựa chọn và trách nhiệm với hành trình tuổi trẻ. Những trải nghiệm được kể bằng giọng gần gũi, hướng người đọc tới việc chủ động sống và học hỏi.',N'CAT-EDIT-003',(SELECT Id FROM dbo.Categories WHERE Name=N'Kỹ năng sống'),(SELECT Id FROM dbo.Authors WHERE Name=N'Rosie Nguyễn'),(SELECT Id FROM dbo.Publishers WHERE Name=N'NXB Hội Nhà Văn'),269000,299000,15,292,2025,N'/images/edition-03.svg',N'',1,N'Tiếng Việt',N'Đang cập nhật',N'14 x 20.5 cm',N'',N'https://nhanam.vn/dat-truoc-tuoi-tre-dang-gia-bao-nhieu-sach-ban-dac-biet-ky-niem-20-nam-nha-nam');
+ IF NOT EXISTS(SELECT 1 FROM dbo.Books WITH(UPDLOCK,HOLDLOCK) WHERE Isbn=N'CAT-EDIT-004')
+ INSERT INTO dbo.Books(Title,Description,Isbn,CategoryId,AuthorId,PublisherId,Price,ListPrice,Stock,Pages,Year,ImagePath,SampleText,IsActive,Language,Binding,Dimensions,Translator,SourceUrl) VALUES(N'Một thoáng ta rực rỡ ở nhân gian — Ấn bản đặc biệt 20 năm',N'Tiểu thuyết được kể qua lá thư của một người con gửi mẹ. Câu chuyện kết nối ký ức gia đình, trải nghiệm trưởng thành và cuộc sống của các thế hệ người Việt trên đất Mỹ.',N'CAT-EDIT-004',(SELECT Id FROM dbo.Categories WHERE Name=N'Văn học'),(SELECT Id FROM dbo.Authors WHERE Name=N'Ocean Vuong'),(SELECT Id FROM dbo.Publishers WHERE Name=N'NXB Hội Nhà Văn'),251000,279000,16,304,2025,N'/images/edition-04.svg',N'',1,N'Tiếng Việt',N'Đang cập nhật',N'14 x 20.5 cm',N'Khánh Nguyên',N'https://nhanam.vn/dat-truoc-mot-thoang-ta-ruc-ro-o-nhan-gian-sach-ban-dac-biet-ky-niem-20-nam-nha-nam');
+ IF NOT EXISTS(SELECT 1 FROM dbo.Books WITH(UPDLOCK,HOLDLOCK) WHERE Isbn=N'CAT-EDIT-005')
+ INSERT INTO dbo.Books(Title,Description,Isbn,CategoryId,AuthorId,PublisherId,Price,ListPrice,Stock,Pages,Year,ImagePath,SampleText,IsActive,Language,Binding,Dimensions,Translator,SourceUrl) VALUES(N'Chuyện con mèo dạy hải âu bay — Ấn bản đặc biệt 20 năm',N'Mèo Zorba nhận lời chăm sóc một quả trứng và dạy chú hải âu non bay. Câu chuyện về loài vật đặt tình bạn, lời hứa và trách nhiệm với môi trường ở trung tâm.',N'CAT-EDIT-005',(SELECT Id FROM dbo.Categories WHERE Name=N'Thiếu nhi'),(SELECT Id FROM dbo.Authors WHERE Name=N'Luis Sepúlveda'),(SELECT Id FROM dbo.Publishers WHERE Name=N'NXB Hội Nhà Văn'),179000,199000,17,142,2025,N'/images/edition-05.svg',N'',1,N'Tiếng Việt',N'Đang cập nhật',N'14 x 20.5 cm',N'Phương Huyền',N'https://nhanam.vn/dat-truoc-chuyen-con-meo-day-hai-au-bay-sach-ban-dac-biet-ky-niem-20-nam-nha-nam');
+ IF NOT EXISTS(SELECT 1 FROM dbo.Books WITH(UPDLOCK,HOLDLOCK) WHERE Isbn=N'CAT-EDIT-006')
+ INSERT INTO dbo.Books(Title,Description,Isbn,CategoryId,AuthorId,PublisherId,Price,ListPrice,Stock,Pages,Year,ImagePath,SampleText,IsActive,Language,Binding,Dimensions,Translator,SourceUrl) VALUES(N'Ngàn năm áo mũ — Ấn bản đặc biệt 20 năm',N'Nghiên cứu về trang phục Việt Nam từ thời Lý đến thời Nguyễn. Tác phẩm xem xét quy chế trang phục trong cung đình và những hình thức ăn mặc trong đời sống dân gian.',N'CAT-EDIT-006',(SELECT Id FROM dbo.Categories WHERE Name=N'Lịch sử & văn hóa'),(SELECT Id FROM dbo.Authors WHERE Name=N'Trần Quang Đức'),(SELECT Id FROM dbo.Publishers WHERE Name=N'NXB Thế Giới'),557000,619000,18,400,2025,N'/images/edition-06.svg',N'',1,N'Tiếng Việt',N'Đang cập nhật',N'17 x 25 cm',N'',N'https://nhanam.vn/dat-truoc-ngan-nam-ao-mu-sach-ban-dac-biet-ky-niem-20-nam-nha-nam');
+ IF NOT EXISTS(SELECT 1 FROM dbo.Books WITH(UPDLOCK,HOLDLOCK) WHERE Isbn=N'CAT-EDIT-007')
+ INSERT INTO dbo.Books(Title,Description,Isbn,CategoryId,AuthorId,PublisherId,Price,ListPrice,Stock,Pages,Year,ImagePath,SampleText,IsActive,Language,Binding,Dimensions,Translator,SourceUrl) VALUES(N'Khuyến học',N'Tác phẩm bàn về ý nghĩa của học vấn, tinh thần độc lập và việc gắn kiến thức với đời sống. Các chủ đề được đặt trong bối cảnh xã hội Nhật Bản thời Minh Trị.',N'CAT-EDIT-007',(SELECT Id FROM dbo.Categories WHERE Name=N'Kỹ năng sống'),(SELECT Id FROM dbo.Authors WHERE Name=N'Fukuzawa Yukichi'),(SELECT Id FROM dbo.Publishers WHERE Name=N'NXB Thế Giới'),80000,89000,19,248,2024,N'/images/edition-07.svg',N'',1,N'Tiếng Việt',N'Đang cập nhật',N'14 x 20.5 cm',N'Phạm Hữu Lợi',N'https://nhanam.vn/khuyen-hoc');
+ IF NOT EXISTS(SELECT 1 FROM dbo.Books WITH(UPDLOCK,HOLDLOCK) WHERE Isbn=N'CAT-EDIT-008')
+ INSERT INTO dbo.Books(Title,Description,Isbn,CategoryId,AuthorId,PublisherId,Price,ListPrice,Stock,Pages,Year,ImagePath,SampleText,IsActive,Language,Binding,Dimensions,Translator,SourceUrl) VALUES(N'Nhật ký Đặng Thùy Trâm',N'Những ghi chép của nữ bác sĩ Đặng Thùy Trâm về cuộc sống nơi chiến tuyến. Nhật ký lưu lại suy nghĩ, tình cảm và tinh thần của một người trẻ trong thời chiến.',N'CAT-EDIT-008',(SELECT Id FROM dbo.Categories WHERE Name=N'Lịch sử & văn hóa'),(SELECT Id FROM dbo.Authors WHERE Name=N'Đặng Thùy Trâm'),(SELECT Id FROM dbo.Publishers WHERE Name=N'NXB Hội Nhà Văn'),81000,90000,20,296,2022,N'/images/edition-08.svg',N'',1,N'Tiếng Việt',N'Đang cập nhật',N'14 x 20.5 cm',N'',N'https://nhanam.vn/nhat-ky-dang-thuy-tram');
+ UPDATE dbo.Books SET Description=N'Một tiểu thuyết theo chân Santiago trên hành trình tìm kiếm điều mình mong muốn, đặt ra câu hỏi về lựa chọn và ý nghĩa của hạnh phúc.' WHERE Isbn=N'CAT-2026-001' AND Description COLLATE Latin1_General_100_BIN2=N'Một tiểu thuyết theo chân Santiago trên hành trình tìm kiếm điều mình mong muốn, đặt ra câu hỏi về lựa chọn và ý nghĩa của hạnh phúc.
+
+Thông tin thư mục đối chiếu từ trang Nhã Nam được dẫn bên dưới. Mã CAT là mã nội bộ, không phải ISBN. Giá, tồn kho và bìa thiết kế chỉ dùng để minh họa; chưa cung cấp nội dung đọc thử của ấn bản này.' COLLATE Latin1_General_100_BIN2 AND DATALENGTH(Description)=DATALENGTH(N'Một tiểu thuyết theo chân Santiago trên hành trình tìm kiếm điều mình mong muốn, đặt ra câu hỏi về lựa chọn và ý nghĩa của hạnh phúc.
+
+Thông tin thư mục đối chiếu từ trang Nhã Nam được dẫn bên dưới. Mã CAT là mã nội bộ, không phải ISBN. Giá, tồn kho và bìa thiết kế chỉ dùng để minh họa; chưa cung cấp nội dung đọc thử của ấn bản này.');
+ UPDATE dbo.Books SET Description=N'Những lá thư xuất hiện ở một tiệm tạp hóa tạo nên câu chuyện kết nối con người qua thời gian, với các tình huống đan xen và bất ngờ.' WHERE Isbn=N'CAT-2026-002' AND Description COLLATE Latin1_General_100_BIN2=N'Những lá thư xuất hiện ở một tiệm tạp hóa tạo nên câu chuyện kết nối con người qua thời gian, với các tình huống đan xen và bất ngờ.
+
+Thông tin thư mục đối chiếu từ trang Nhã Nam được dẫn bên dưới. Mã CAT là mã nội bộ, không phải ISBN. Giá, tồn kho và bìa thiết kế chỉ dùng để minh họa; chưa cung cấp nội dung đọc thử của ấn bản này.' COLLATE Latin1_General_100_BIN2 AND DATALENGTH(Description)=DATALENGTH(N'Những lá thư xuất hiện ở một tiệm tạp hóa tạo nên câu chuyện kết nối con người qua thời gian, với các tình huống đan xen và bất ngờ.
+
+Thông tin thư mục đối chiếu từ trang Nhã Nam được dẫn bên dưới. Mã CAT là mã nội bộ, không phải ISBN. Giá, tồn kho và bìa thiết kế chỉ dùng để minh họa; chưa cung cấp nội dung đọc thử của ấn bản này.');
+ UPDATE dbo.Books SET Description=N'Câu chuyện về một vị khách nhỏ từ hành tinh xa, gợi suy nghĩ về tình bạn, sự quan tâm và cách người lớn nhìn thế giới.' WHERE Isbn=N'CAT-2026-003' AND Description COLLATE Latin1_General_100_BIN2=N'Câu chuyện về một vị khách nhỏ từ hành tinh xa, gợi suy nghĩ về tình bạn, sự quan tâm và cách người lớn nhìn thế giới.
+
+Thông tin thư mục đối chiếu từ trang Nhã Nam được dẫn bên dưới. Mã CAT là mã nội bộ, không phải ISBN. Giá, tồn kho và bìa thiết kế chỉ dùng để minh họa; chưa cung cấp nội dung đọc thử của ấn bản này.' COLLATE Latin1_General_100_BIN2 AND DATALENGTH(Description)=DATALENGTH(N'Câu chuyện về một vị khách nhỏ từ hành tinh xa, gợi suy nghĩ về tình bạn, sự quan tâm và cách người lớn nhìn thế giới.
+
+Thông tin thư mục đối chiếu từ trang Nhã Nam được dẫn bên dưới. Mã CAT là mã nội bộ, không phải ISBN. Giá, tồn kho và bìa thiết kế chỉ dùng để minh họa; chưa cung cấp nội dung đọc thử của ấn bản này.');
+ UPDATE dbo.Books SET Description=N'Một tác phẩm phi hư cấu xem xét những cách con người can thiệp vào môi trường và các câu hỏi đi kèm việc sửa chữa tác động của chính mình.' WHERE Isbn=N'CAT-2026-004' AND Description COLLATE Latin1_General_100_BIN2=N'Một tác phẩm phi hư cấu xem xét những cách con người can thiệp vào môi trường và các câu hỏi đi kèm việc sửa chữa tác động của chính mình.
+
+Thông tin thư mục đối chiếu từ trang Nhã Nam được dẫn bên dưới. Mã CAT là mã nội bộ, không phải ISBN. Giá, tồn kho và bìa thiết kế chỉ dùng để minh họa; chưa cung cấp nội dung đọc thử của ấn bản này.' COLLATE Latin1_General_100_BIN2 AND DATALENGTH(Description)=DATALENGTH(N'Một tác phẩm phi hư cấu xem xét những cách con người can thiệp vào môi trường và các câu hỏi đi kèm việc sửa chữa tác động của chính mình.
+
+Thông tin thư mục đối chiếu từ trang Nhã Nam được dẫn bên dưới. Mã CAT là mã nội bộ, không phải ISBN. Giá, tồn kho và bìa thiết kế chỉ dùng để minh họa; chưa cung cấp nội dung đọc thử của ấn bản này.');
+ UPDATE dbo.Books SET Description=N'Một công trình khảo cứu về tên họ người Việt, đặt việc gọi tên trong quan hệ với lịch sử và đời sống văn hóa.' WHERE Isbn=N'CAT-2026-005' AND Description COLLATE Latin1_General_100_BIN2=N'Một công trình khảo cứu về tên họ người Việt, đặt việc gọi tên trong quan hệ với lịch sử và đời sống văn hóa.
+
+Thông tin thư mục đối chiếu từ trang Nhã Nam được dẫn bên dưới. Mã CAT là mã nội bộ, không phải ISBN. Giá, tồn kho và bìa thiết kế chỉ dùng để minh họa; chưa cung cấp nội dung đọc thử của ấn bản này.' COLLATE Latin1_General_100_BIN2 AND DATALENGTH(Description)=DATALENGTH(N'Một công trình khảo cứu về tên họ người Việt, đặt việc gọi tên trong quan hệ với lịch sử và đời sống văn hóa.
+
+Thông tin thư mục đối chiếu từ trang Nhã Nam được dẫn bên dưới. Mã CAT là mã nội bộ, không phải ISBN. Giá, tồn kho và bìa thiết kế chỉ dùng để minh họa; chưa cung cấp nội dung đọc thử của ấn bản này.');
+ UPDATE dbo.Books SET Description=N'Công trình nghiên cứu của Nguyễn Văn Huyên cung cấp một góc nhìn về văn hóa và xã hội Việt Nam qua những khảo sát của tác giả.' WHERE Isbn=N'CAT-2026-006' AND Description COLLATE Latin1_General_100_BIN2=N'Công trình nghiên cứu của Nguyễn Văn Huyên cung cấp một góc nhìn về văn hóa và xã hội Việt Nam qua những khảo sát của tác giả.
+
+Thông tin thư mục đối chiếu từ trang Nhã Nam được dẫn bên dưới. Mã CAT là mã nội bộ, không phải ISBN. Giá, tồn kho và bìa thiết kế chỉ dùng để minh họa; chưa cung cấp nội dung đọc thử của ấn bản này.' COLLATE Latin1_General_100_BIN2 AND DATALENGTH(Description)=DATALENGTH(N'Công trình nghiên cứu của Nguyễn Văn Huyên cung cấp một góc nhìn về văn hóa và xã hội Việt Nam qua những khảo sát của tác giả.
+
+Thông tin thư mục đối chiếu từ trang Nhã Nam được dẫn bên dưới. Mã CAT là mã nội bộ, không phải ISBN. Giá, tồn kho và bìa thiết kế chỉ dùng để minh họa; chưa cung cấp nội dung đọc thử của ấn bản này.');
+ UPDATE dbo.Books SET Description=N'Sách của bác sĩ Ngô Đức Hùng giới thiệu chủ đề sơ cứu cho bạn đọc phổ thông. Trang này chỉ cung cấp thông tin về sách.' WHERE Isbn=N'CAT-2026-007' AND Description COLLATE Latin1_General_100_BIN2=N'Sách của bác sĩ Ngô Đức Hùng giới thiệu chủ đề sơ cứu cho bạn đọc phổ thông. Trang này chỉ cung cấp thông tin về sách.
+
+Thông tin thư mục đối chiếu từ trang Nhã Nam được dẫn bên dưới. Mã CAT là mã nội bộ, không phải ISBN. Giá, tồn kho và bìa thiết kế chỉ dùng để minh họa; chưa cung cấp nội dung đọc thử của ấn bản này.' COLLATE Latin1_General_100_BIN2 AND DATALENGTH(Description)=DATALENGTH(N'Sách của bác sĩ Ngô Đức Hùng giới thiệu chủ đề sơ cứu cho bạn đọc phổ thông. Trang này chỉ cung cấp thông tin về sách.
+
+Thông tin thư mục đối chiếu từ trang Nhã Nam được dẫn bên dưới. Mã CAT là mã nội bộ, không phải ISBN. Giá, tồn kho và bìa thiết kế chỉ dùng để minh họa; chưa cung cấp nội dung đọc thử của ấn bản này.');
+ UPDATE dbo.Books SET Description=N'Tiểu thuyết kinh điển của Goethe kể về Werther và một mối tình để lại nhiều day dứt, gắn với lịch sử văn học châu Âu.' WHERE Isbn=N'CAT-2026-008' AND Description COLLATE Latin1_General_100_BIN2=N'Tiểu thuyết kinh điển của Goethe kể về Werther và một mối tình để lại nhiều day dứt, gắn với lịch sử văn học châu Âu.
+
+Thông tin thư mục đối chiếu từ trang Nhã Nam được dẫn bên dưới. Mã CAT là mã nội bộ, không phải ISBN. Giá, tồn kho và bìa thiết kế chỉ dùng để minh họa; chưa cung cấp nội dung đọc thử của ấn bản này.' COLLATE Latin1_General_100_BIN2 AND DATALENGTH(Description)=DATALENGTH(N'Tiểu thuyết kinh điển của Goethe kể về Werther và một mối tình để lại nhiều day dứt, gắn với lịch sử văn học châu Âu.
+
+Thông tin thư mục đối chiếu từ trang Nhã Nam được dẫn bên dưới. Mã CAT là mã nội bộ, không phải ISBN. Giá, tồn kho và bìa thiết kế chỉ dùng để minh họa; chưa cung cấp nội dung đọc thử của ấn bản này.');
+ COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+ IF @@TRANCOUNT>0 ROLLBACK TRANSACTION;
+ THROW;
+END CATCH;
+GO
+SELECT COUNT(*) AS TongSoSach FROM dbo.Books;
+GO

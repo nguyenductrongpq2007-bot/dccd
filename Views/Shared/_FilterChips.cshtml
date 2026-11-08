@@ -1,0 +1,24 @@
+@model CatalogModel
+@{
+ var chips=new List<(string Key,string Label)>();
+ if(Model.Kind!="all")chips.Add(("kind",Model.Kind=="published"?"Có nguồn ấn bản":"Sách minh họa"));
+ if(Model.Q!=null)chips.Add(("q","Từ khóa: "+Model.Q));
+ if(Model.Category!=null)chips.Add(("category",Model.Categories.FirstOrDefault(x=>x.Id==Model.Category)?.Name??"Thể loại đã chọn"));
+ if(Model.Author!=null)chips.Add(("author",Model.Authors.FirstOrDefault(x=>x.Id==Model.Author)?.Name??"Tác giả đã chọn"));
+ if(Model.Publisher!=null)chips.Add(("publisher",Model.Publishers.FirstOrDefault(x=>x.Id==Model.Publisher)?.Name??"NXB đã chọn"));
+ if(Model.MinPrice!=null)chips.Add(("minPrice","Từ "+Model.MinPrice.Value.ToString("N0",CultureInfo.GetCultureInfo("vi-VN"))+"đ"));
+ if(Model.MaxPrice!=null)chips.Add(("maxPrice","Đến "+Model.MaxPrice.Value.ToString("N0",CultureInfo.GetCultureInfo("vi-VN"))+"đ"));
+ if(Model.InStock)chips.Add(("inStock","Còn hàng"));
+ if(Model.HasSample)chips.Add(("hasSample","Có đọc thử"));
+ string ClearFilter(string key)
+ {
+  var query=new Dictionary<string,string?>{
+   ["q"]=Model.Q,["category"]=Model.Category?.ToString(),["author"]=Model.Author?.ToString(),
+   ["publisher"]=Model.Publisher?.ToString(),["minPrice"]=Model.MinPrice?.ToString(CultureInfo.InvariantCulture),
+   ["maxPrice"]=Model.MaxPrice?.ToString(CultureInfo.InvariantCulture),["inStock"]=Model.InStock?"true":null,
+   ["hasSample"]=Model.HasSample?"true":null,["sort"]=Model.Sort,["kind"]=Model.Kind=="all"?null:Model.Kind};
+  query.Remove(key);
+  return Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/Home/Index",query)+"#catalog";
+ }
+}
+@if(chips.Count>0){<div class="active-filters" aria-label="Bộ lọc đang áp dụng">@foreach(var chip in chips){<a class="filter-chip" href="@ClearFilter(chip.Key)" aria-label="Bỏ bộ lọc @chip.Label">@chip.Label <span aria-hidden="true">×</span></a>}<a class="clear-all-filters" href="/#catalog">Xóa tất cả</a></div>}

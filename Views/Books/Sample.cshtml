@@ -1,0 +1,35 @@
+@model Book
+@{
+    ViewData["Title"] = "Đọc thử · " + Model.Title;
+    int currentPage = ViewBag.Page;
+    int pageCount = ViewBag.PageCount;
+}
+<div class="reader-header">
+    <a asp-action="Details" asp-route-id="@Model.Id">← Trở lại thông tin sách</a>
+    <span>ĐỌC THỬ · @(currentPage) / @(pageCount)</span>
+</div>
+<article class="reader">
+    <span class="eyebrow">MỘC BOOKS · TRANG MẪU</span>
+    <h1>@Model.Title</h1>
+    <div class="reader-text">@ViewBag.Text</div>
+    <div class="reader-number">@(currentPage)</div>
+</article>
+<nav class="reader-nav">
+    @if (currentPage > 1)
+    {
+        <a class="btn btn-outline-forest" asp-action="Sample" asp-route-id="@Model.Id" asp-route-page="@(currentPage - 1)">← Trang trước</a>
+    }
+    <span>Trang @(currentPage) / @(pageCount)</span>
+    @if (currentPage < pageCount)
+    {
+        <a class="btn btn-forest" asp-action="Sample" asp-route-id="@Model.Id" asp-route-page="@(currentPage + 1)">Trang tiếp →</a>
+    }
+</nav>
+@if(Model.Isbn.StartsWith("DEMO-"))
+{
+ <p class="text-center muted">Nội dung mẫu do dự án biên soạn, dùng để minh họa chức năng đọc thử.</p>
+}
+else
+{
+ <p class="text-center muted">Trang đọc thử được cửa hàng cung cấp.</p>
+}

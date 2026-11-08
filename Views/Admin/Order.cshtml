@@ -1,0 +1,58 @@
+@model Order
+@{
+    ViewData["Title"] = "Đơn BS" + Model.Id.ToString("D6");
+}
+<partial name="_AdminNav" />
+<h1>Đơn hàng BS@(Model.Id.ToString("D6"))</h1>
+<p>
+    @Model.CreatedAt.AddHours(7).ToString("dd/MM/yyyy HH:mm") ·
+    <span class="status">@Model.Status</span>
+</p>
+<div class="checkout-grid">
+    <div class="panel">
+        <h4>Sách đã đặt</h4>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Sách</th>
+                        <th>Đơn giá</th>
+                        <th>Số lượng</th>
+                        <th>Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrderItems)
+                    {
+                        <tr>
+                            <td>@item.BookTitle</td>
+                            <td>@(item.UnitPrice.ToString("N0", CultureInfo.GetCultureInfo("vi-VN")))đ</td>
+                            <td>@item.Quantity</td>
+                            <td>@((item.UnitPrice * item.Quantity).ToString("N0", CultureInfo.GetCultureInfo("vi-VN")))đ</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <p>Phí giao hàng: @(Model.ShippingFee.ToString("N0", CultureInfo.GetCultureInfo("vi-VN")))đ</p>
+        <h4>Tổng thanh toán: @(Model.Total.ToString("N0", CultureInfo.GetCultureInfo("vi-VN")))đ</h4>
+        <p>Phương thức: Thanh toán khi nhận hàng (COD)</p>
+    </div>
+    <aside class="summary">
+        <h4>Giao đến</h4>
+        <strong>@Model.Recipient</strong>
+        <p>@Model.Phone</p>
+        <p>@Model.Address</p>
+        <p>Ghi chú: @Model.Note</p>
+    </aside>
+</div>
+<form asp-action="SetStatus" method="post" class="panel mt-4">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <label for="status">Cập nhật trạng thái</label>
+    <select id="status" name="status" class="form-select">
+        <option value="Đang giao">Đang giao</option>
+        <option value="Đã giao">Đã giao</option>
+    </select>
+    <button class="btn btn-forest mt-3">Cập nhật</button>
+    <p class="muted">Chờ duyệt → Đang giao → Đã giao. Không chuyển ngược.</p>
+</form>

@@ -1,0 +1,2 @@
+@model List<Order>
+<div class="table-responsive panel"><table class="table"><thead><tr><th>Mã</th><th>Khách hàng</th><th>Ngày đặt</th><th>Tổng tiền</th><th>Trạng thái</th><th></th></tr></thead><tbody>@foreach(var o in Model){<tr><td>BS@(o.Id.ToString("D6"))</td><td>@o.User.FullName</td><td>@o.CreatedAt.AddHours(7).ToString("dd/MM/yyyy")</td><td>@o.Total.ToString("N0", CultureInfo.GetCultureInfo("vi-VN"))đ</td><td>@o.Status</td><td><a href="/Admin/Order/@o.Id">Xem / xử lý</a></td></tr>}</tbody></table></div>

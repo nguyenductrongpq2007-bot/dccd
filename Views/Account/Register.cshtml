@@ -1,0 +1,9 @@
+@model RegisterForm
+@{ViewData["Title"]="Tạo tài khoản";}
+<div class="form-panel"><span class="eyebrow">CHÀO MỪNG ĐẾN VỚI MỘC BOOKS</span><h1>Tạo tài khoản</h1><p class="muted">Điền vài thông tin để bắt đầu đặt sách và theo dõi đơn hàng.</p><form method="post"><div asp-validation-summary="All" class="text-danger validation-summary" role="alert"></div><input name="returnUrl" type="hidden" value="@ViewBag.ReturnUrl" />
+ <label asp-for="FullName">Họ và tên</label><input asp-for="FullName" class="form-control" autocomplete="name" required minlength="2" maxlength="100" placeholder="Nguyễn Văn An" /><span asp-validation-for="FullName" class="field-error"></span>
+ <label asp-for="Email">Email</label><input asp-for="Email" type="email" class="form-control" autocomplete="username" required placeholder="ban@example.com" /><span asp-validation-for="Email" class="field-error"></span>
+ <label asp-for="NewPassword">Mật khẩu</label><div class="password-field"><input asp-for="NewPassword" class="form-control" autocomplete="new-password" required minlength="8" maxlength="100" /><button type="button" data-password-toggle="NewPassword" aria-controls="NewPassword" aria-pressed="false">Hiện</button></div><p class="input-help">Ít nhất 8 ký tự. Hãy chọn mật khẩu bạn chưa dùng ở nơi khác.</p><span asp-validation-for="NewPassword" class="field-error"></span>
+ <label asp-for="ConfirmPassword">Nhập lại mật khẩu</label><div class="password-field"><input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" required minlength="8" /><button type="button" data-password-toggle="ConfirmPassword" aria-controls="ConfirmPassword" aria-pressed="false">Hiện</button></div><span asp-validation-for="ConfirmPassword" class="field-error"></span>
+ <button class="btn btn-forest w-100 mt-4">Tạo tài khoản</button></form><p class="auth-switch">Đã có tài khoản? <a asp-action="Login" asp-route-returnUrl="@ViewBag.ReturnUrl">Đăng nhập →</a></p>
+</div>

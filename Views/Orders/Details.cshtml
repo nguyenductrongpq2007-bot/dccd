@@ -1,0 +1,51 @@
+@model Order
+@{
+    ViewData["Title"] = "Đơn BS" + Model.Id.ToString("D6");
+    int stage=Model.Status=="Đã giao"?3:Model.Status=="Đang giao"?2:1;
+    string[] stages=["Chờ duyệt","Đang giao","Đã giao"];
+}
+<h1>Đơn hàng BS@(Model.Id.ToString("D6"))</h1>
+<p>
+    @Model.CreatedAt.AddHours(7).ToString("dd/MM/yyyy HH:mm") ·
+    <span class="status">@Model.Status</span>
+</p>
+<ol class="order-timeline" aria-label="Trạng thái xử lý đơn hàng">@for(int n=0;n<stages.Length;n++){<li class="@(n+1<stage?"done":n+1==stage?"current":"")"><span>@(n+1<stage?"✓":(n+1).ToString())</span><strong>@stages[n]</strong></li>}</ol>
+<div class="order-tools"><a class="btn btn-outline-forest" href="/Orders">← Đơn hàng của tôi</a><form asp-action="Reorder" method="post"><input type="hidden" name="id" value="@Model.Id" /><button class="btn btn-forest">Mua lại đơn này →</button></form></div><p class="input-help">Mua lại sẽ thêm sách còn bán vào giỏ với giá hiện tại. Bạn kiểm tra và đặt đơn mới sau.</p>
+<div class="checkout-grid">
+    <div class="panel">
+        <h4>Sách đã đặt</h4>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Sách</th>
+                        <th>Đơn giá</th>
+                        <th>Số lượng</th>
+                        <th>Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrderItems)
+                    {
+                        <tr>
+                            <td>@item.BookTitle</td>
+                            <td>@(item.UnitPrice.ToString("N0", CultureInfo.GetCultureInfo("vi-VN")))đ</td>
+                            <td>@item.Quantity</td>
+                            <td>@((item.UnitPrice * item.Quantity).ToString("N0", CultureInfo.GetCultureInfo("vi-VN")))đ</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <p>Phí giao hàng: @(Model.ShippingFee.ToString("N0", CultureInfo.GetCultureInfo("vi-VN")))đ</p>
+        <h4>Tổng thanh toán: @(Model.Total.ToString("N0", CultureInfo.GetCultureInfo("vi-VN")))đ</h4>
+        <p>Phương thức: Thanh toán khi nhận hàng (COD)</p>
+    </div>
+    <aside class="summary">
+        <h4>Giao đến</h4>
+        <strong>@Model.Recipient</strong>
+        <p>@Model.Phone</p>
+        <p>@Model.Address</p>
+        <p>Ghi chú: @Model.Note</p>
+    </aside>
+</div>

@@ -1,0 +1,4 @@
+@model ReadingListModel
+@{ViewData["Title"]=Model.Title;}
+<div class="section-heading"><div><span class="eyebrow">TỦ SÁCH CỦA BẠN</span><h1>@Model.Title</h1><p class="muted">@Model.Description</p></div><a href="/#catalog">Khám phá sách →</a></div>
+@if(Model.Books.Count == 0){<div class="empty"><span class="empty-icon">♡</span><h3>Tủ sách đang chờ bạn</h3><p>Mở một cuốn sách hoặc nhấn trái tim để lưu lại cuốn bạn thích.</p><a class="btn btn-forest" href="/#catalog">Tìm sách ngay →</a></div>}else{<div class="book-grid shelf-grid">@foreach(var b in Model.Books){<partial name="_BookCard" model="b" />}</div>}

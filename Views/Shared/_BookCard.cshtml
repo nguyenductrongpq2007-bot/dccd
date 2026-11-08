@@ -1,0 +1,27 @@
+@model Book
+@inject ReadingListService Reading
+@{var saved = Reading.Contains(Model.Id); var hasSample = !string.IsNullOrWhiteSpace(Model.SampleText);}
+<article class="book-card">
+ <div class="cover-shell">
+  <a class="cover-area" asp-controller="Books" asp-action="Details" asp-route-id="@Model.Id">
+   <img src="@Model.ImagePath" alt="Bìa @Model.Title" loading="lazy" width="180" height="260" />
+   @if(Model.ListPrice > Model.Price){<span class="discount">-@Math.Round((1 - Model.Price / Model.ListPrice) * 100)%</span>}
+  </a>
+  <form data-reading-toggle data-book-id="@Model.Id" class="favorite-form" asp-controller="Books" asp-action="ToggleFavorite" method="post">
+   <input type="hidden" name="id" value="@Model.Id" />
+   <input type="hidden" name="returnUrl" value="@($"{Context.Request.Path}{Context.Request.QueryString}")" />
+   <button class="favorite-button @(saved ? "is-saved" : "")" type="submit" aria-label="@(saved ? "Bỏ yêu thích: " : "Lưu yêu thích: ")@Model.Title" aria-pressed="@(saved ? "true" : "false")">@(saved ? "♥" : "♡")</button>
+  </form>
+ </div>
+ <div class="card-copy">
+  <small>@Model.Category.Name</small>@if(Model.Isbn.StartsWith("DEMO-")){<span class="catalog-label">Minh họa</span>}
+  <a class="book-title" asp-controller="Books" asp-action="Details" asp-route-id="@Model.Id">@Model.Title</a>
+  <p class="author">@Model.Author.Name</p>
+  <div class="prices"><strong>@Model.Price.ToString("N0", CultureInfo.GetCultureInfo("vi-VN"))đ</strong>@if(Model.ListPrice > Model.Price){<del>@Model.ListPrice.ToString("N0", CultureInfo.GetCultureInfo("vi-VN"))đ</del>}</div>
+  <p class="card-stock @(Model.Stock > 0 ? "" : "out-of-stock")">@(Model.Stock > 0 ? "● Còn hàng" : "○ Tạm hết hàng") <span>@(Model.Binding == "Đang cập nhật" ? "Sách giấy" : Model.Binding)</span></p>
+  <div class="card-actions">
+   @if(hasSample){<a asp-controller="Books" asp-action="Sample" asp-route-id="@Model.Id">Đọc thử ↗</a>}else{<a asp-controller="Books" asp-action="Details" asp-route-id="@Model.Id">Xem chi tiết</a>}
+   <form asp-controller="Cart" asp-action="Add" method="post" data-cart-add><input type="hidden" name="id" value="@Model.Id" /><button type="submit" disabled="@(Model.Stock <= 0)" aria-label="Thêm @Model.Title vào giỏ">+ Giỏ hàng</button></form>
+  </div>
+ </div>
+</article>

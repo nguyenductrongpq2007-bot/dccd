@@ -1,0 +1,72 @@
+@model CatalogModel
+@{
+ ViewData["Title"] = "Nhà sách trực tuyến";
+ bool home = !Model.IsFiltered && Model.Page == 1 && Model.Sort == "new";
+ string[] icons = ["📖", "📊", "🌱", "🎈", "💭", "🔬", "🌏", "💻", "🏛", "🩺"];
+}
+@if(home)
+{
+ <section class="market-hero">
+  <div class="hero-copy"><span class="eyebrow">TÌM CUỐN SÁCH DÀNH CHO BẠN</span><h1>Mỗi trang sách,<br />một <em>chân trời mới.</em></h1><p>Từ những câu chuyện thân quen đến tri thức mới.<br />Khám phá tủ sách, đọc thử và chọn điều bạn yêu.</p><a href="#catalog" class="btn btn-forest">Khám phá ngay →</a><div class="hero-note">Sách giấy · Lọc theo sở thích · Thanh toán khi nhận hàng</div></div>
+  <div class="hero-art"><div class="sun"></div><div class="hero-book book-one"><small>MỘC BOOKS</small><b>Đọc để<br />hiểu mình.</b><div class="flower">✳</div><span>MỖI NGÀY MỘT TRANG SÁCH</span></div><div class="hero-book book-two"><small>TỦ SÁCH CỦA BẠN</small><b>Mở thêm<br />thế giới.</b><div class="arc"></div><span>MỘT KHỞI ĐẦU MỚI</span></div><div class="art-caption">Bạn sẽ đọc gì hôm nay?</div></div>
+ </section>
+
+}
+<section id="categories" class="category-section" aria-labelledby="category-heading">
+ <div class="section-heading"><div><span class="eyebrow">CHỌN THEO SỞ THÍCH</span><h2 id="category-heading">Bạn muốn đọc gì?</h2></div><a href="/#catalog">Tất cả sách →</a></div>
+ <div class="category-grid">
+  @for(int n=0;n<Model.Categories.Count;n++)
+  {
+   var c=Model.Categories[n];
+   <a class="category-tile @(Model.Category == c.Id ? "selected" : "")" asp-action="Index" asp-route-category="@c.Id" asp-fragment="catalog"><span>@icons[n % icons.Length]</span><strong>@c.Name</strong></a>
+  }
+ </div>
+</section>
+@if(home && Model.BestSellers.Count > 0)
+{
+ <section class="shelf-section"><div class="section-heading"><div><span class="eyebrow">TỪ NHỮNG ĐƠN ĐÃ GIAO</span><h2>Sách bán chạy</h2></div><a href="/Home/Index?sort=bestseller#catalog">Xem tất cả →</a></div><div class="book-grid shelf-grid">@foreach(var b in Model.BestSellers){<partial name="_BookCard" model="b" />}</div></section>
+}
+@if(home){<partial name="_HomeDiscovery" model="Model" />}
+<section id="catalog" class="catalog-section">
+ <div class="section-heading"><div><span class="eyebrow">MỘT CUỐN SÁCH, NGÀN CẢM HỨNG</span><h2>@(Model.IsFiltered ? "Kết quả tìm sách" : Model.Sort == "bestseller" ? "Sách bán chạy" : "Khám phá tủ sách")</h2></div><span class="muted">@Model.Total đầu sách</span></div>
+ <div class="catalog-layout">
+  <aside class="filters"><details class="filter-details" open><summary>Bộ lọc sách <span>⌄</span></summary>
+   <form id="catalog-filter" method="get" asp-controller="Home" asp-action="Index" asp-fragment="catalog">
+    <label for="filter-q">Từ khóa</label><input id="filter-q" class="form-control" name="q" maxlength="120" value="@Model.Q" placeholder="Tên sách, tác giả, mã sách" />
+    <label for="kind">Danh mục</label><select id="kind" name="kind" class="form-select"><option value="all" selected="@(Model.Kind=="all")">Tất cả sách</option><option value="published" selected="@(Model.Kind=="published")">Sách có nguồn ấn bản</option><option value="demo" selected="@(Model.Kind=="demo")">Sách minh họa đọc thử</option></select>
+    <label for="category">Thể loại</label><select id="category" name="category" class="form-select"><option value="">Tất cả thể loại</option>@foreach(var c in Model.Categories){<option value="@c.Id" selected="@(Model.Category == c.Id)">@c.Name</option>}</select>
+    <label for="author">Tác giả</label><select id="author" name="author" class="form-select"><option value="">Tất cả tác giả</option>@foreach(var c in Model.Authors){<option value="@c.Id" selected="@(Model.Author == c.Id)">@c.Name</option>}</select>
+    <label for="publisher">Nhà xuất bản</label><select id="publisher" name="publisher" class="form-select"><option value="">Tất cả nhà xuất bản</option>@foreach(var c in Model.Publishers){<option value="@c.Id" selected="@(Model.Publisher == c.Id)">@c.Name</option>}</select>
+    <label for="minPrice">Khoảng giá (VNĐ)</label><div class="price-range"><input id="minPrice" class="form-control" name="minPrice" type="number" min="0" step="1000" value="@Model.MinPrice" placeholder="Từ" aria-label="Giá thấp nhất" /><span>–</span><input class="form-control" name="maxPrice" type="number" min="0" step="1000" value="@Model.MaxPrice" placeholder="Đến" aria-label="Giá cao nhất" /></div>
+    <div class="price-presets"><button type="button" data-price="0,100000">Dưới 100k</button><button type="button" data-price="100000,200000">100k–200k</button><button type="button" data-price="200000,">Trên 200k</button></div>
+    <label class="check-filter"><input name="inStock" type="checkbox" value="true" checked="@Model.InStock" /> Chỉ sách còn hàng</label>
+    <label class="check-filter"><input name="hasSample" type="checkbox" value="true" checked="@Model.HasSample" /> Có trang đọc thử</label>
+    
+    <button class="btn btn-forest w-100 mt-3" type="submit">Tìm kiếm</button><a class="clear-filter" href="/#catalog">Xóa tìm kiếm</a>
+   </form>
+  </details><div class="filter-note">Tìm sách hợp với bạn,<br />đọc theo nhịp của mình.</div></aside>
+  <div class="catalog-results">
+   <div class="catalog-toolbar"><span>@Model.Total kết quả · Trang @Model.Page / @Math.Max(1, Model.PageCount)</span><label for="catalog-sort">Sắp xếp <select id="catalog-sort" form="catalog-filter" name="sort" class="form-select" data-catalog-sort><option value="new" selected="@(Model.Sort == "new")">Mới thêm</option><option value="price-asc" selected="@(Model.Sort == "price-asc")">Giá thấp đến cao</option><option value="price-desc" selected="@(Model.Sort == "price-desc")">Giá cao đến thấp</option><option value="discount" selected="@(Model.Sort == "discount")">Giảm giá nhiều</option><option value="bestseller" selected="@(Model.Sort == "bestseller")">Bán chạy</option><option value="title" selected="@(Model.Sort == "title")">Tên sách A–Z</option></select><noscript><button type="submit" form="catalog-filter" class="btn btn-outline-forest">Áp dụng</button></noscript></label></div>
+   <partial name="_FilterChips" model="Model" />
+   @if(Model.Books.Count == 0)
+   {
+    <div class="empty"><span class="empty-icon">📚</span><h3>@(Model.Sort == "bestseller" ? "Chưa có sách bán chạy" : "Chưa tìm thấy sách phù hợp")</h3><p>@(Model.Sort == "bestseller" ? "Danh sách sẽ xuất hiện khi cửa hàng có đơn hàng đã giao." : "Thử từ khóa khác hoặc bỏ bớt bộ lọc để tìm thêm sách.")</p><a class="btn btn-forest" href="/#catalog">Khám phá tất cả sách</a></div>
+   }
+   else
+   {
+    <div class="book-grid">@foreach(var b in Model.Books){<partial name="_BookCard" model="b" />}</div>
+   }
+   <nav class="pagination-row" aria-label="Phân trang sách">
+    @for(int n=1;n<=Model.PageCount;n++)
+    {
+     <a class="@(n == Model.Page ? "active" : "")" aria-label="Trang @n" asp-action="Index" asp-route-q="@Model.Q" asp-route-category="@Model.Category" asp-route-author="@Model.Author" asp-route-publisher="@Model.Publisher" asp-route-minPrice="@Model.MinPrice" asp-route-maxPrice="@Model.MaxPrice" asp-route-inStock="@Model.InStock" asp-route-hasSample="@Model.HasSample" asp-route-sort="@Model.Sort" asp-route-page="@n" asp-route-kind="@Model.Kind" asp-fragment="catalog">@n</a>
+    }
+   </nav>
+  </div>
+ </div>
+</section>
+@if(home && Model.RecentBooks.Count > 0)
+{
+ <section class="shelf-section"><div class="section-heading"><div><span class="eyebrow">TIẾP TỤC KHÁM PHÁ</span><h2>Sách bạn vừa xem</h2></div><a href="/Books/Recent">Xem lại tủ sách →</a></div><div class="book-grid shelf-grid">@foreach(var b in Model.RecentBooks){<partial name="_BookCard" model="b" />}</div></section>
+}
+@if(home){<partial name="_HomeCommunity" model="Model" />}

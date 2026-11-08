@@ -1,0 +1,2 @@
+@model AdminDashboard
+@{ViewData["Title"]="Quản trị";}<partial name="_AdminNav"/><h1>Tổng quan nhà sách</h1><div class="stats"><div><small>Đầu sách</small><b>@Model.BookCount</b></div><div><small>Người dùng</small><b>@Model.UserCount</b></div><div><small>Đơn chờ duyệt</small><b>@Model.Pending</b></div><div><small>Doanh thu đơn đã giao</small><b>@Model.Revenue.ToString("N0", CultureInfo.GetCultureInfo("vi-VN"))đ</b></div></div><h3>Đơn hàng gần đây</h3><partial name="_AdminOrders" model="Model.Orders"/>

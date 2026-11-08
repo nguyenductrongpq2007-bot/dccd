@@ -1,0 +1,7 @@
+@model LoginForm
+@{ViewData["Title"]="Đăng nhập";}
+<section class="auth"><div class="auth-art"><span class="eyebrow">CHÀO MỪNG TRỞ LẠI</span><h2>Tủ sách của bạn<br />đang chờ một<br />câu chuyện mới.</h2><p>Đăng nhập để tiếp tục đặt sách và xem đơn hàng của bạn.</p></div><form method="post" class="auth-form"><h1>Đăng nhập</h1><p class="muted">Một tài khoản để theo dõi những cuốn sách bạn đã mua.</p><div asp-validation-summary="All" class="text-danger validation-summary" role="alert"></div><input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+ <label asp-for="Email">Email</label><input asp-for="Email" type="email" class="form-control" autocomplete="username" required placeholder="ban@example.com" /><span asp-validation-for="Email" class="field-error"></span>
+ <label asp-for="Password">Mật khẩu</label><div class="password-field"><input asp-for="Password" class="form-control" autocomplete="current-password" required /><button type="button" data-password-toggle="Password" aria-controls="Password" aria-pressed="false">Hiện</button></div><span asp-validation-for="Password" class="field-error"></span>
+ <button class="btn btn-forest w-100 mt-4">Đăng nhập</button><p class="auth-switch">Chưa có tài khoản? <a asp-action="Register" asp-route-returnUrl="@ViewBag.ReturnUrl">Đăng ký ngay →</a></p><a class="auth-back" href="/">← Tiếp tục khám phá sách</a>
+</form></section>
